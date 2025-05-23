@@ -1,0 +1,130 @@
+// leitor de qr code
+const qrcode = require('qrcode-terminal');
+const { Client, Buttons, List, MessageMedia } = require('whatsapp-web.js'); // Mudança Buttons
+const client = new Client();
+// serviço de leitura do qr code
+client.on('qr', qr => {
+    qrcode.generate(qr, {small: true});
+});
+// apos isso ele diz que foi tudo certo
+client.on('ready', () => {
+    console.log('Tudo certo! WhatsApp conectado.');
+});
+// E inicializa tudo 
+client.initialize();
+
+const delay = ms => new Promise(res => setTimeout(res, ms)); // Função que usamos para criar o delay entre uma ação e outra
+
+// Funil
+
+client.on('message', async msg => {
+
+    if (msg.body.match(/(menu|Menu|dia|tarde|noite|oi|Oi|Olá|olá|ola|Ola)/i) && msg.from.endsWith('@c.us')) {
+
+        const chat = await msg.getChat();
+
+        await delay(3000); //delay de 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
+        const contact = await msg.getContact(); //Pegando o contato
+        const name = contact.pushname; //Pegando o nome do contato
+        await client.sendMessage(msg.from,'Olá! '+ name.split(" ")[0] + 'Sou o assistente virtual da Casa das Plantas. Como posso ajudá-lo hoje? Por favor, digite uma das opções abaixo:\n\n1 -Qual é o endereço da loja?\n\n2 - Qual o horario de funcionamento da loja?\n\n3 - Já sei oque preciso quero pedir\n\n4 - Preciso de ajuda pra descidir\n\n5 -preciso de dicas de cuidados com as plantas'); //Primeira mensagem de texto
+        await delay(3000); //delay de 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(5000); //Delay de 5 segundos
+    
+        
+    }
+
+
+
+
+    if (msg.body !== null && msg.body === '1' && msg.from.endsWith('@c.us')) {
+        const chat = await msg.getChat();
+
+
+        await delay(3000); //delay de 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(3000);
+        await client.sendMessage(msg.from, 'Rua Danilo de Oliveira, 276, Canudos, Novo Hamburgo \n\nhttps://maps.app.goo.gl/mzehDrVcPAdB3XzeA ');
+
+        await delay(3000); //delay de 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(3000);
+        await client.sendMessage(msg.from, '\n\ntambém temos entrega\n\nme diz teu endereço pra calcular o valor da entrega');
+
+    
+
+    }
+
+    if (msg.body !== null && msg.body === '2' && msg.from.endsWith('@c.us')) {
+        const chat = await msg.getChat();
+
+
+        await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(3000);
+        await client.sendMessage(msg.from, 'Segunda a sabado\n\n9:30 a 12:00\n\n14:00 a 18:00');
+
+        await delay(3000); //delay de 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(3000);
+        await client.sendMessage(msg.from, 'Domingo fechado\n\nmas estamos sempre online aqui no whatsapp');
+    }
+
+    if (msg.body !== null && msg.body === '3' && msg.from.endsWith('@c.us')) {
+        const chat = await msg.getChat();
+
+
+        await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(3000);
+        await client.sendMessage(msg.from, 'Para agilizar vou te fazer umas perguntas antes de te enviar pra atendimento\n\n Tem print do que você gostou?\n\no me diz o nome da planta\n\nTamanho do vaso\n\nCor do vaso\n\nE o que mais você gostaria de saber?');
+        
+        await delay(3000); //delay de 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(3000);
+        await client.sendMessage(msg.from,  'já estou te encaminhando pra atendimento');
+
+    }
+
+    if (msg.body !== null && msg.body === '4' && msg.from.endsWith('@c.us')) {
+        const chat = await msg.getChat();
+
+        await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(3000);
+        await client.sendMessage(msg.from, 'Me diz no que posso te ajudar.\n\nÉ um presente?\n\nÉ pra você mesmo?\n\nVocê quer saber o preço de algum produto?\n\nOu você quer saber mais sobre nossas opções');
+
+
+        await delay(3000); //delay de 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(3000);
+        await client.sendMessage(msg.from, 'uma olhadinha no nosso instagram pode te ajudar a decidir\n\nhttps://www.instagram.com/casadasplantasnh/ \n\nme diz oque você precisa');
+
+
+    }
+
+    if (msg.body !== null && msg.body === '5' && msg.from.endsWith('@c.us')) {
+        const chat = await msg.getChat();
+
+
+        await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(3000);
+        await client.sendMessage(msg.from, 'me diz qual a planta\n\ntem foto do problema?\n\nou só quer manter bonita?');
+
+        await delay(3000); //delay de 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(3000);
+        await client.sendMessage(msg.from, 'Deixa sua pergunta e logo te atendo');
+    }
+
+
+
+
+
+
+
+
+});
